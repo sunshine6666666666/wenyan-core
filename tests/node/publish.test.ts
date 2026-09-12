@@ -101,6 +101,14 @@ describe("publish.ts tests", () => {
         expect(mockWechatClient.publishArticle).toHaveBeenCalled();
     });
 
+    it("should verify credentials without publishing", async () => {
+        await wechatPublisher.verifyCredentials("mock_app_id", "mock_app_secret");
+
+        expect(mockWechatClient.fetchAccessToken).toHaveBeenCalledWith("mock_app_id", "mock_app_secret");
+        expect(mockWechatClient.uploadMaterial).not.toHaveBeenCalled();
+        expect(mockWechatClient.publishArticle).not.toHaveBeenCalled();
+    });
+
     it("should throw error when publishArticle fails", async () => {
         mockWechatClient.publishArticle.mockRejectedValueOnce(new Error("41005: mock error"));
 
