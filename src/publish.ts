@@ -68,7 +68,10 @@ export class WechatPublisher {
     }
 
     public async verifyCredentials(appId: string, appSecret: string): Promise<void> {
-        await this.fetchAccessToken(appId, appSecret);
+        const result = await this.fetchAccessToken(appId, appSecret);
+        if (this.tokenStore) {
+            await this.tokenStore.setToken(appId, result.access_token, result.expires_in);
+        }
     }
 
     public async uploadImage(file: Blob, filename: string, accessToken: string, appId?: string): Promise<WechatUploadResponse> {
